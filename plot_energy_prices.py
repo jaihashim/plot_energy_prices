@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 """
 This script extracts, combines, processes, and plots wholesale energy
 prices from the National Energy Market (NEM). It scrapes historical
