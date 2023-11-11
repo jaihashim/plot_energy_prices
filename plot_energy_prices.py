@@ -331,7 +331,7 @@ def plot_data(processed_data, sharey=False):
     # Adjust the layout to prevent overlap
     fig.tight_layout()
     # Save the plots to current directory
-    fig.savefig(output_file, facecolor='white')
+    fig.savefig(OUTPUT_FILE, facecolor='white')
     print(f'Saved {OUTPUT_FILE} to current directory.')
     
     # df_percentiles.to_csv('percentiles.csv', index=False)
