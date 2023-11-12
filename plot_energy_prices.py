@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 """
 This script extracts, combines, processes, and plots wholesale energy
 prices from the National Energy Market (NEM). It scrapes historical
@@ -295,6 +292,10 @@ def plot_data(processed_data, sharey=False):
     df_percentiles = processed_data.groupby(['State', 'Hour'])['Price'].quantile(percentile_levels).unstack(level=-1)
     df_percentiles.columns = ['1st percentile', '10th percentile', '50th percentile',
                               '90th percentile', '99th percentile']
+
+    # Unused one-liner ordinal function, for modifying code to accept
+    # varying percentile_levels
+    # ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n//10%10!=1)*(n%10<4)*n%10::4])
     
     # Get the unique states for individual plots
     states = processed_data['State'].unique()
@@ -303,9 +304,6 @@ def plot_data(processed_data, sharey=False):
     colormap = plt.cm.get_cmap('tab10', 5)
 
     # Create subplots for each state with individual x-axis labels
-        # Note: set sharey=True if you would like the subplots to have
-        # the same y-axis range for clearer comparison of prices between
-        # states
     fig, axes = plt.subplots(nrows=len(states), ncols=1, figsize=(16, 8 * len(states)), sharex=False, sharey=sharey)
 
     for i, state in enumerate(states):
@@ -331,7 +329,8 @@ def plot_data(processed_data, sharey=False):
     fig.savefig(OUTPUT_FILE, facecolor='white')
     print(f'Saved {OUTPUT_FILE} to current directory.')
     
-    # df_percentiles.to_csv('percentiles.csv', index=False)
+    # Save percentiles data to current directory
+    # df_percentiles.to_csv('percentiles.csv')
 
 if __name__ == '__main__':
     report_urls = get_report_urls(BASE_URL, DATE_FORMAT, START_DATE, END_DATE)
@@ -339,8 +338,12 @@ if __name__ == '__main__':
     formatted_data = format_data(combined_data)
     if check_data_cleanliness(formatted_data) is True:
         processed_data = process_data(formatted_data)
-        plot_data(processed_data)
-        
+        # Note: set sharey=True if you would like the subplots to have
+        # the same y-axis range for clearer comparison of prices between
+        # states
+        plot_data(processed_data, sharey=False)
+
+        # Save combined data and processed data to current directory
         # combined_data.to_csv('combined_data.csv', index=False)
         # processed_data.to_csv('processed_data.csv', index=False)
     else:
